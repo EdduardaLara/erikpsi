@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Erik Henrique Silva | Psicologia</title>
+
+=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --primary:#2F5D62;
+    --secondary:#5E8B7E;
+    --accent:#A7C4BC;
+    --light:#F6F9F8;
+    --white:#FFFFFF;
+    --dark:#233238;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins', sans-serif;
+    background:var(--light);
+    color:var(--dark);
+    line-height:1.7;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+header{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+}
+
+.hero{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+}
+
+.hero-content h1{
+    font-size:3.5rem;
+    margin-bottom:10px;
+}
+
+.hero-content h2{
+    font-weight:400;
+    margin-bottom:25px;
+    color:#dff5ef;
+}
+
+.hero-content p{
+    margin-bottom:30px;
+    font-size:1.1rem;
+}
+
+.btn{
+    display:inline-block;
+    padding:14px 28px;
+    background:white;
+    color:var(--primary);
+    text-decoration:none;
+    border-radius:50px;
+    font-weight:600;
+    transition:.3s;
+    margin-right:10px;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn-outline{
+    background:transparent;
+    border:2px solid white;
+    color:white;
+}
+
+.hero-card{
+    background:rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    padding:40px;
+    border-radius:20px;
+}
+
+.hero-card ul{
+    list-style:none;
+}
+
+.hero-card li{
+    margin-bottom:15px;
+}
+
+section{
+    padding:90px 0;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.section-title h2{
+    font-size:2.3rem;
+    color:var(--primary);
+}
+
+.about{
+    background:white;
+}
+
+.about-content{
+    max-width:900px;
+    margin:auto;
+    text-align:center;
+    font-size:1.05rem;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,.07);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card h3{
+    color:var(--primary);
+    margin-bottom:15px;
+}
+
+.timeline{
+    display:grid;
+    gap:20px;
+}
+
+.timeline-item{
+    background:white;
+    padding:30px;
+    border-left:5px solid var(--secondary);
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
+
+.skills{
+    background:white;
+}
+
+.skills ul{
+    list-style:none;
+    max-width:850px;
+    margin:auto;
+}
+
+.skills li{
+    margin-bottom:15px;
+    padding:20px;
+    background:#f3f7f6;
+    border-radius:10px;
+}
+
+.contact{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    text-align:center;
+}
+
+.contact h2{
+    margin-bottom:20px;
+}
+
+.contact p{
+    margin-bottom:10px;
+}
+
+footer{
+    background:#18343b;
+    color:white;
+    text-align:center;
+    padding:25px;
+}
+
+.whatsapp{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#25d366;
+    color:white;
+    width:65px;
+    height:65px;
+    text-decoration:none;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+@media(max-width:900px){
+
+.hero{
+    grid-template-columns:1fr;
+}
+
+.hero-content h1{
+    font-size:2.5rem;
+}
+
+.hero-card{
+    margin-top:20px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="container hero">
+
+        <div class="hero-content">
+            <h1>Erik Henrique Silva</h1>
+
+            <h2>Acadêmico de Psicologia • UNIFENAS</h2>
+
+            <p>
+                Um espaço voltado ao acolhimento, escuta qualificada,
+                desenvolvimento emocional e promoção da saúde mental.
+            </p>
+
+            7416927" class="btn">
+                Falar no WhatsApp
+            </a>
+
+            #contato
+                Entrar em Contato
+            </a>
+        </div>
+
+        <div class="hero-card">
+            <h3>Experiência em:</h3>
+            <ul>
+                <li>✓ Psicologia Hospitalar Pediátrica</li>
+                <li>✓ Saúde Mental</li>
+                <li>✓ Desenvolvimento Infantil</li>
+                <li>✓ Psicoeducação</li>
+                <li>✓ Escuta Terapêutica</li>
+                <li>✓ Projetos de Extensão Universitária</li>
+            </ul>
+        </div>
+
+    </div>
+</header>
+
+<section class="about">
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Sobre Mim</h2>
+        </div>
+
+        <div class="about-content">
+            <p>
+                Sou Erik Henrique Silva, acadêmico de Psicologia pela UNIFENAS.
+                Minha trajetória envolve atuação em projetos de saúde mental,
+                psicologia hospitalar pediátrica e desenvolvimento socioemocional.
+                Acredito que cada pessoa possui uma história única e merece um
+                espaço seguro de acolhimento, respeito e crescimento.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Áreas de Interesse</h2>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Saúde Mental</h3>
+                <p>
+                    Promoção do bem-estar emocional e desenvolvimento de
+                    estratégias para lidar com desafios cotidianos.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Psicologia Infantil</h3>
+                <p>
+                    Experiência em ambiente hospitalar pediátrico e atividades
+                    voltadas ao desenvolvimento infantil.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Psicoeducação</h3>
+                <p>
+                    Ações educativas sobre saúde mental, emoções,
+                    comportamento e qualidade de vida.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section>
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Experiência Profissional</h2>
+        </div>
+
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <h3>Hospital Alzira Velano</h3>
+                <p>
+                    Estágio em Psicologia Hospitalar Pediátrica com acolhimento,
+                    suporte psicossocial e participação em equipe multidisciplinar.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <h3>UNIFENAS</h3>
+                <p>
+                    Pesquisador e palestrante em projetos de extensão voltados
+                    para saúde mental e tecnologia.
+                </p>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Rede do Campo</h3>
+                <p>
+                    Representação institucional, alinhamento estratégico e
+                    participação em fóruns de desenvolvimento organizacional.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<section class="skills">
+
+    <div class="container">
+
+        <div class="section-title">
+            <h2>Competências</h2>
+        </div>
+
+        <ul>
+            <li>Escuta Terapêutica e Acolhimento Humanizado</li>
+            <li>Psicologia do Desenvolvimento</li>
+            <li>Mediação de Conflitos</li>
+            <li>Psicoeducação</li>
+            <li>Comunicação Assertiva</li>
+            <li>Planejamento Estratégico e Organização</li>
+        </ul>
+
+    </div>
+
+</section>
+
+<section id="contato" class="contact">
+
+    <div class="container">
+
+        <h2>Entre em Contato</h2>
+
+        <p><strong>WhatsApp:</strong> (35) 99741-6927</p>
+        <p><strong>E-mail:</strong> erikhriq2@gmail.com</p>
+        <p><strong>Localização:</strong> Alfenas - Minas Gerais</p>
+
+        <br>
+
+        .me/5535997416927" class="btn">
+            Iniciar Conversa
+        </a>
+
+    </div>
+
+</section>
+
+<footer>
+    <p>
+        © 2026 Erik Henrique Silva | Acadêmico de Psicologia - UNIFENAS
+    </p>
+</footer>
+
+/5535997416927"
+class="whatsapp"
+target="_blank">
+💬
+</a>
+
+</body>
+</html>
