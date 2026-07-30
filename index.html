@@ -1,192 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowRight,
-  BrainCircuit,
-  CheckCircle2,
-  ChevronRight,
-  Download,
-  HeartHandshake,
-  Instagram,
-  Mail,
-  MapPin,
-  Menu,
-  MessageCircle,
-  Phone,
-  ShieldCheck,
-  Sparkles,
-  Users,
-  X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-
-const WHATSAPP = "https://wa.me/5535997416927?text=Olá%2C%20Erik.%20Conheci%20seu%20trabalho%20pelo%20site%20e%20gostaria%20de%20conversar.";
-const EMAIL = "mailto:erikhriq2@gmail.com";
-
-const navigation = [
-  ["Início", "#inicio"],
-  ["Sobre", "#sobre"],
-  ["Serviços", "#servicos"],
-  ["Materiais", "#materiais"],
-  ["Contato", "#contato"],
-];
-
-const services = [
-  {
-    icon: HeartHandshake,
-    number: "01",
-    title: "Saúde emocional",
-    text: "Conteúdos e iniciativas voltados à promoção do equilíbrio emocional e do bem-estar cotidiano.",
-  },
-  {
-    icon: Sparkles,
-    number: "02",
-    title: "Desenvolvimento pessoal",
-    text: "Recursos para ampliar o autoconhecimento e fortalecer habilidades e recursos internos.",
-  },
-  {
-    icon: Users,
-    number: "03",
-    title: "Relacionamentos",
-    text: "Reflexões para construir conexões mais saudáveis, conscientes e respeitosas.",
-  },
-  {
-    icon: BrainCircuit,
-    number: "04",
-    title: "Qualidade de vida",
-    text: "Estratégias educativas para uma rotina mais equilibrada e emocionalmente sustentável.",
-  },
-];
-
-function NeuralBackdrop() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div className="absolute -top-32 -right-24 h-[520px] w-[520px] rounded-full bg-teal-300/10 blur-3xl" />
-      <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-cyan-400/10 blur-3xl" />
-      <svg className="absolute right-[-7%] top-8 h-[90%] w-[58%] opacity-25" viewBox="0 0 700 700" fill="none">
-        <g stroke="#5DE0D2" strokeWidth="1">
-          <path d="M93 181L231 94L366 173L515 82L624 194" />
-          <path d="M73 374L213 288L366 389L531 275L659 376" />
-          <path d="M112 558L252 476L394 563L539 462L630 551" />
-          <path d="M231 94L213 288L252 476M366 173L366 389L394 563M515 82L531 275L539 462" />
-        </g>
-        {[ [93,181],[231,94],[366,173],[515,82],[624,194],[73,374],[213,288],[366,389],[531,275],[659,376],[112,558],[252,476],[394,563],[539,462],[630,551] ].map(([x,y],i)=>(
-          <g key={i}><circle cx={x} cy={y} r="8" fill="#0C3536" stroke="#5DE0D2"/><circle cx={x} cy={y} r="2.5" fill="#AAFFF4"/></g>
-        ))}
-      </svg>
-    </div>
-  );
-}
-
-function SectionLabel({ children, dark = false }) {
-  return (
-    <div className={`mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] ${dark ? "text-teal-700" : "text-teal-300"}`}>
-      <span className={`h-px w-8 ${dark ? "bg-teal-700" : "bg-teal-300"}`} />{children}
-    </div>
-  );
-}
-
-export default function ErikHenriqueSite() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-[#F6F7F2] font-sans text-[#153638] selection:bg-teal-200 selection:text-[#103436]">
-      <header className={`fixed inset-x-0 top-0 z-50 transition-all ${scrolled ? "bg-[#F6F7F2]/95 shadow-sm backdrop-blur-md" : "bg-transparent"}`}>
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
-          #inicio
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#173F40] text-teal-200 shadow-lg shadow-teal-900/10"><BrainCircuit size={21}/></span>
-            <span className="leading-tight"><b className="block text-sm tracking-wide text-[#173F40]">ERIK HENRIQUE</b><span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-teal-700">Psicologia</span></span>
-          </a>
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegação principal">
-            {navigation.map(([label, href]) => <a key={href} href={href} className="text-sm font-medium text-slate-600 transition hover:text-teal-700">{label}</a>)}
-            <Button asChild className="rounded-full bg-[#173F40] px-6 text-white hover:bg-teal-800"><a href={WHATSAPP} target="_blank" rel="noreferrer">Agendar conversa</a></Button>
-          </nav>
-          <button onClick={() => setMenuOpen(!menuOpen)} className="rounded-xl border border-slate-200 bg-white p-2.5 text-[#173F40] lg:hidden" aria-label="Abrir menu">{menuOpen ? <X/> : <Menu/>}</button>
-        </div>
-        <AnimatePresence>{menuOpen && <motion.nav initial={{opacity:0,y:-8}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} className="border-t border-slate-200 bg-[#F6F7F2] px-5 py-5 shadow-lg lg:hidden">{navigation.map(([label,href])=><a onClick={()=>setMenuOpen(false)} key={href} href={href} className="block border-b border-slate-200 py-3 text-sm font-medium">{label}</a>)}<Button asChild className="mt-5 w-full rounded-full bg-[#173F40]"><a href={WHATSAPP}>Agendar conversa</a></Button></motion.nav>}</AnimatePresence>
-      </header>
-
-      <main>
-        <section id="inicio" className="relative flex min-h-[760px] items-center overflow-hidden bg-[#0C2F31] pt-20 text-white">
-          <NeuralBackdrop />
-          <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-14 px-5 py-24 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
-            <motion.div initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{duration:.7}}>
-              <SectionLabel>Escuta, respeito e desenvolvimento</SectionLabel>
-              <h1 className="max-w-3xl text-5xl font-semibold leading-[1.06] tracking-[-0.04em] sm:text-6xl lg:text-7xl">Cuidado emocional para viver com mais <span className="text-teal-300">consciência.</span></h1>
-              <p className="mt-7 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">Um espaço de conteúdo, acolhimento e desenvolvimento humano dedicado ao autoconhecimento e à promoção da saúde mental.</p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="h-14 rounded-full bg-teal-300 px-7 font-semibold text-[#0C2F31] hover:bg-teal-200"><a href={WHATSAPP} target="_blank" rel="noreferrer">Agendar uma conversa <ArrowRight className="ml-2" size={18}/></a></Button>
-                <Button asChild size="lg" variant="outline" className="h-14 rounded-full border-white/20 bg-white/5 px-7 text-white hover:bg-white/10 hover:text-white"><a href="#sobre">Conhecer o trabalho</a></Button>
-              </div>
-              <div className="mt-12 flex flex-wrap gap-x-8 gap-y-4 text-xs uppercase tracking-[0.18em] text-slate-400"><span className="flex items-center gap-2"><ShieldCheck size={17} className="text-teal-300"/> Ética e respeito</span><span className="flex items-center gap-2"><HeartHandshake size={17} className="text-teal-300"/> Escuta humanizada</span></div>
-            </motion.div>
-            <div className="relative hidden min-h-[500px] lg:block" aria-hidden="true">
-              <div className="absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-teal-300/20" />
-              <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-teal-300/25 to-cyan-900/10 shadow-[0_0_100px_rgba(45,212,191,.16)] backdrop-blur-sm" />
-              <BrainCircuit className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-teal-200" size={170} strokeWidth={.7}/>
-              <div className="absolute right-2 top-20 rounded-2xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-md"><p className="text-3xl font-light text-teal-200">01</p><p className="mt-1 text-xs uppercase tracking-widest text-slate-300">Autoconhecimento</p></div>
-              <div className="absolute bottom-20 left-0 rounded-2xl border border-white/10 bg-white/10 px-5 py-4 backdrop-blur-md"><p className="text-3xl font-light text-teal-200">02</p><p className="mt-1 text-xs uppercase tracking-widest text-slate-300">Bem-estar</p></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="sobre" className="py-24 sm:py-32">
-          <div className="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[.82fr_1.18fr] lg:px-8">
-            <div className="relative mx-auto w-full max-w-md">
-              <div className="aspect-[4/5] overflow-hidden rounded-[2rem] bg-[#DDE8E3] p-8 shadow-xl shadow-slate-900/5">
-                <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-teal-800/10 bg-gradient-to-br from-[#164A4B] to-[#0D3032] p-8 text-white">
-                  <BrainCircuit size={68} strokeWidth={1} className="text-teal-200"/>
-                  <div><p className="text-xs uppercase tracking-[.25em] text-teal-200">Propósito</p><p className="mt-4 text-3xl font-light leading-snug">Informação que acolhe. Conhecimento que transforma.</p></div>
-                </div>
-              </div>
-              <div className="absolute -bottom-5 -right-4 rounded-2xl bg-white p-5 shadow-xl sm:-right-8"><CheckCircle2 className="text-teal-700"/><p className="mt-3 text-sm font-semibold">Abordagem humanizada</p></div>
-            </div>
-            <div className="flex flex-col justify-center">
-              <SectionLabel dark>Sobre mim</SectionLabel>
-              <h2 className="text-4xl font-semibold tracking-[-.03em] text-[#153638] sm:text-5xl">Erik Henrique Silva</h2>
-              <p className="mt-3 text-sm font-semibold uppercase tracking-[.2em] text-teal-700">Acadêmico de Psicologia • UNIFENAS</p>
-              <div className="mt-8 space-y-5 text-base leading-8 text-slate-600">
-                <p>Acadêmico de Psicologia pela UNIFENAS, com experiência acadêmica em Psicologia Hospitalar Pediátrica e participação em projetos voltados à saúde mental e ao desenvolvimento humano.</p>
-                <p>Meu propósito é compartilhar conhecimento e contribuir para um espaço acolhedor, ético e humanizado, favorecendo o fortalecimento do bem-estar emocional e da qualidade de vida.</p>
-              </div>
-              <div className="mt-9 grid gap-4 sm:grid-cols-2">
-                {["Acolhimento e empatia","Respeito à singularidade","Conhecimento baseado em evidências","Desenvolvimento humano"].map(x=><div key={x} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium"><CheckCircle2 size={18} className="text-teal-700"/>{x}</div>)}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="servicos" className="bg-white py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-5 lg:px-8">
-            <div className="grid gap-7 lg:grid-cols-2 lg:items-end"><div><SectionLabel dark>Como posso ajudar</SectionLabel><h2 className="max-w-xl text-4xl font-semibold tracking-[-.03em] sm:text-5xl">Caminhos para cuidar da mente e da vida.</h2></div><p className="max-w-lg leading-7 text-slate-600 lg:justify-self-end">Iniciativas educativas e conteúdos construídos para apoiar reflexões sobre saúde emocional, relações e desenvolvimento pessoal.</p></div>
-            <div className="mt-14 grid gap-5 md:grid-cols-2">
-              {services.map((item,i)=><motion.div key={item.title} initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*.08}}><Card className="group h-full overflow-hidden rounded-3xl border-slate-200 shadow-none transition duration-300 hover:-translate-y-1 hover:border-teal-300 hover:shadow-xl hover:shadow-teal-900/5"><CardContent className="p-7 sm:p-8"><div className="flex items-start justify-between"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-teal-50 text-teal-800"><item.icon size={23}/></span><span className="font-mono text-sm text-slate-400">{item.number}</span></div><h3 className="mt-8 text-2xl font-semibold">{item.title}</h3><p className="mt-3 leading-7 text-slate-600">{item.text}</p><a href="#contato" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-800">Saiba mais <ChevronRight size={16} className="transition group-hover:translate-x-1"/></a></CardContent></Card></motion.div>)}
-            </div>
-          </div>
-        </section>
-
-        <section id="materiais" className="bg-[#EAF0EB] py-24 sm:py-32">
-          <div className="mx-auto max-w-7xl px-5 lg:px-8">
-            <div className="max-w-2xl"><SectionLabel dark>Materiais digitais</SectionLabel><h2 className="text-4xl font-semibold tracking-[-.03em] sm:text-5xl">Conhecimento para levar com você.</h2><p className="mt-5 leading-7 text-slate-600">Espaço preparado para e-books, guias e conteúdos educativos. Os itens abaixo podem ser substituídos pelos produtos finais.</p></div>
-            <div className="mt-12 grid gap-6 lg:grid-cols-3">
-              {[ ["Guia de autocuidado","Práticas simples para construir uma rotina mais consciente e equilibrada.","Em breve"],["Caderno de autoconhecimento","Perguntas e exercícios para apoiar sua reflexão pessoal.","Em breve"],["Saúde emocional na prática","Conteúdo educativo para compreender emoções no cotidiano.","Em breve"] ].map(([t,d,b],i)=><Card key={t} className="rounded-3xl border-0 bg-white shadow-lg shadow-slate-900/5"><CardContent className="p-7"><div className="flex aspect-[16/9] items-center justify-center rounded-2xl bg-[#123E40] text-teal-200"><div className="relative"><BrainCircuit size={64} strokeWidth={1}/><span className="absolute -right-4 -top-3 font-mono text-xs text-white/40">0{i+1}</span></div></div><p className="mt-6 text-xs font-semibold uppercase tracking-[.18em] text-teal-700">Material educativo</p><h3 className="mt-2 text-xl font-semibold">{t}</h3><p className="mt-3 min-h-14 text-sm leading-6 text-slate-600">{d}</p><Button disabled variant="outline" className="mt-6 w-full rounded-full border-slate-200"><Download size={16} className="mr-2"/>{b}</Button></CardContent></Card>)}
-            </div>
-          </div>
-        </section>
-
-        <section id="contato" className="relative overflow-hidden bg-[#0C2F31] py-24 text-white sm:py-32"><NeuralBackdrop/><div className="relative z-10 mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-2 lg:px-8"><div><SectionLabel>Entre em contato</SectionLabel><h2 className="max-w-xl text-4xl font-semibold tracking-[-.03em] sm:text-5xl">Vamos começar uma conversa?</h2><p className="mt-6 max-w-lg leading-8 text-slate-300">Entre em contato para conhecer os projetos, materiais e possibilidades de colaboração.</p><Button asChild size="lg" className="mt-9 h-14 rounded-full bg-teal-300 px-7 text-[#0C2F31] hover:bg-teal-200"><a href={WHATSAPP} target="_blank" rel="noreferrer"><MessageCircle className="mr-2" size={19}/>Falar no WhatsApp</a></Button></div><div className="grid gap-4 self-center"><a href={WHATSAPP} target="_blank" rel="noreferrer" className="flex items-center gap-5 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition hover:bg-white/10"><span className="grid h-12 w-12 place-items-center rounded-xl bg-teal-300/15 text-teal-200"><Phone size={21}/></span><span><small className="block text-xs uppercase tracking-widest text-slate-400">Telefone</small><b className="mt-1 block font-medium">(35) 99741-6927</b></span></a><a href={EMAIL} className="flex items-center gap-5 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition hover:bg-white/10"><span className="grid h-12 w-12 place-items-center rounded-xl bg-teal-300/15 text-teal-200"><Mail size={21}/></span><span><small className="block text-xs uppercase tracking-widest text-slate-400">E-mail</small><b className="mt-1 block font-medium">erikhriq2@gmail.com</b></span></a><div className="flex items-center gap-5 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm"><span className="grid h-12 w-12 place-items-center rounded-xl bg-teal-300/15 text-teal-200"><MapPin size={21}/></span><span><small className="block text-xs uppercase tracking-widest text-slate-400">Localização</small><b className="mt-1 block font-medium">Alfenas • Minas Gerais</b></span></div></div></div></section>
-      </main>
-
-      <footer className="bg-[#082628] px-5 py-9 text-slate-400"><div className="mx-auto flex max-w-7xl flex-col gap-5 text-sm sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-3"><BrainCircuit size={20} className="text-teal-300"/><span>© 2026 Erik Henrique Psicologia</span></div><p className="max-w-xl text-xs leading-5 sm:text-right">Conteúdo de caráter educativo. Este site não substitui avaliação, diagnóstico ou acompanhamento realizado por profissional habilitado. Em situações de emergência, procure o serviço de saúde da sua região.</p></div></footer>
-    </div>
-  );
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Erik Henrique Psicologia. Conteúdo sobre saúde emocional, autoconhecimento, relacionamentos e qualidade de vida.">
+  <title>Erik Henrique Psicologia</title>
+  <style>
+    :root{--ink:#102f32;--deep:#08282b;--green:#176b68;--mint:#72d6c8;--paper:#f6f5f0;--white:#fff;--text:#496064;--line:#dce5e1;--shadow:0 22px 60px rgba(9,46,48,.12)}
+    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;scroll-padding-top:86px}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}a{color:inherit;text-decoration:none}button{font:inherit}.container{width:min(1120px,calc(100% - 40px));margin:auto}.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:18px;color:var(--green);font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.eyebrow:before{content:"";width:32px;height:2px;background:currentColor}.eyebrow.light{color:var(--mint)}h1,h2,h3{line-height:1.08;letter-spacing:-.035em}h2{font-size:clamp(2.15rem,5vw,3.8rem)}p{color:var(--text)}.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 25px;border:1px solid transparent;border-radius:999px;font-weight:750;transition:.25s}.btn:hover{transform:translateY(-2px)}.btn-primary{background:var(--mint);color:var(--deep)}.btn-dark{background:var(--ink);color:white}.btn-outline{border-color:rgba(255,255,255,.25);color:white;background:rgba(255,255,255,.05)}
+    header{position:fixed;z-index:30;inset:0 0 auto;background:rgba(246,245,240,.92);border-bottom:1px solid rgba(16,47,50,.08);backdrop-filter:blur(16px)}.nav{height:78px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:13px;background:var(--ink);display:grid;place-items:center}.mark svg{width:25px}.brand b{display:block;font-size:.83rem;letter-spacing:.09em}.brand small{display:block;color:var(--green);font-size:.62rem;font-weight:800;letter-spacing:.19em;text-transform:uppercase}.links{display:flex;align-items:center;gap:30px}.links a{font-size:.88rem;font-weight:650;color:#40595c}.links a:hover{color:var(--green)}.menu-btn{display:none;border:0;background:var(--ink);color:white;border-radius:10px;width:43px;height:43px;font-size:1.3rem}
+    .hero{position:relative;overflow:hidden;min-height:760px;padding:156px 0 90px;background:var(--deep);color:white}.hero:before{content:"";position:absolute;width:540px;height:540px;border-radius:50%;right:-120px;top:80px;background:radial-gradient(circle,rgba(114,214,200,.17),transparent 68%)}.neural{position:absolute;right:-40px;top:90px;width:min(52vw,650px);opacity:.35}.hero-grid{position:relative;display:grid;grid-template-columns:1.12fr .88fr;align-items:center;gap:60px}.hero h1{font-size:clamp(3.2rem,7vw,6.15rem);max-width:780px}.hero h1 span{color:var(--mint)}.hero p{max-width:620px;margin-top:25px;font-size:1.08rem;line-height:1.85;color:#c8d6d5}.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}.trust{display:flex;flex-wrap:wrap;gap:28px;margin-top:46px;color:#aabcbc;font-size:.7rem;font-weight:750;letter-spacing:.14em;text-transform:uppercase}.trust span{display:flex;align-items:center;gap:9px}.trust i{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 5px rgba(114,214,200,.1)}.brain-card{position:relative;aspect-ratio:1;display:grid;place-items:center}.brain-orbit{width:360px;height:360px;border-radius:50%;border:1px solid rgba(114,214,200,.25);display:grid;place-items:center;box-shadow:inset 0 0 90px rgba(114,214,200,.08),0 0 90px rgba(114,214,200,.06)}.brain-orbit svg{width:205px}.chip{position:absolute;padding:16px 19px;border:1px solid rgba(255,255,255,.13);border-radius:15px;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#cfe0df}.chip strong{font-size:1.8rem;color:var(--mint);display:block;letter-spacing:0}.chip.one{right:0;top:20%}.chip.two{left:0;bottom:18%}
+    section{padding:110px 0}.about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:85px;align-items:center}.portrait{position:relative;min-height:520px;border-radius:34px;padding:30px;background:#dce8e2;box-shadow:var(--shadow)}.portrait-inner{height:100%;min-height:460px;border-radius:25px;background:linear-gradient(145deg,#1a5b59,var(--deep));padding:34px;display:flex;flex-direction:column;justify-content:space-between;color:white;overflow:hidden;position:relative}.portrait-inner:after{content:"";position:absolute;width:270px;height:270px;border:1px solid rgba(114,214,200,.28);border-radius:50%;right:-80px;top:-45px}.portrait-inner svg{width:70px}.portrait blockquote{font-size:1.85rem;line-height:1.35;letter-spacing:-.025em}.portrait small{color:var(--mint);font-weight:800;letter-spacing:.18em;text-transform:uppercase}.about-copy .role{margin:14px 0 26px;color:var(--green);font-size:.75rem;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.about-copy p{margin-top:15px;font-size:1rem;line-height:1.85}.values{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}.value{padding:15px;border:1px solid var(--line);border-radius:13px;background:white;font-size:.86rem;font-weight:700}.value:before{content:"✓";color:var(--green);margin-right:10px}
+    .services{background:white}.section-head{display:flex;justify-content:space-between;align-items:end;gap:50px}.section-head>div{max-width:640px}.section-head>p{max-width:430px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:55px}.card{border:1px solid var(--line);border-radius:25px;padding:30px;background:white;transition:.3s}.card:hover{transform:translateY(-5px);border-color:var(--mint);box-shadow:var(--shadow)}.card-top{display:flex;justify-content:space-between;align-items:center}.icon{width:50px;height:50px;border-radius:15px;background:#e7f5f1;display:grid;place-items:center;color:var(--green);font-size:1.4rem}.num{font-family:monospace;color:#94a5a6}.card h3{font-size:1.45rem;margin-top:28px}.card p{margin-top:12px}.card a{display:inline-block;margin-top:22px;color:var(--green);font-size:.85rem;font-weight:800}
+    .products{background:#e8efea}.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:45px}.product{border-radius:25px;padding:22px;background:white;box-shadow:0 12px 35px rgba(9,46,48,.06)}.cover{aspect-ratio:16/10;border-radius:18px;background:var(--ink);display:grid;place-items:center;position:relative;overflow:hidden}.cover:before,.cover:after{content:"";position:absolute;border:1px solid rgba(114,214,200,.3);border-radius:50%}.cover:before{width:180px;height:180px}.cover:after{width:105px;height:105px}.cover svg{position:relative;z-index:1;width:58px}.product small{display:block;margin-top:22px;color:var(--green);font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.product h3{margin-top:8px;font-size:1.25rem}.product p{margin:12px 0 20px;font-size:.9rem}.soon{display:block;padding:12px;border:1px solid var(--line);border-radius:999px;text-align:center;color:#748486;font-size:.82rem;font-weight:750}
+    .contact{position:relative;overflow:hidden;background:var(--deep);color:white}.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}.contact p{margin-top:22px;color:#bdcecd;max-width:520px}.contact-list{display:grid;gap:13px}.contact-item{display:flex;align-items:center;gap:17px;padding:19px;border:1px solid rgba(255,255,255,.12);border-radius:17px;background:rgba(255,255,255,.05)}.contact-item .icon{flex:none;background:rgba(114,214,200,.13);color:var(--mint)}.contact-item small{display:block;color:#8fa6a6;font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.contact-item b{font-size:.95rem}footer{padding:28px 0;background:#061e20;color:#8ca1a2}.foot{display:flex;justify-content:space-between;gap:30px;align-items:center;font-size:.8rem}.foot p{max-width:650px;color:#8ca1a2;text-align:right;font-size:.7rem}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){.links{display:none;position:absolute;top:78px;left:0;right:0;padding:18px 20px;background:var(--paper);border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:0}.links.open{display:flex}.links a{padding:13px 0;border-bottom:1px solid var(--line)}.links .btn{margin-top:12px}.menu-btn{display:block}.hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr}.brain-card{display:none}.hero{min-height:auto}.about-grid{gap:50px}.section-head{display:block}.section-head>p{margin-top:20px}.product-grid{grid-template-columns:1fr 1fr}.foot{display:block}.foot p{text-align:left;margin-top:12px}.neural{width:100%;opacity:.2}.contact-grid{gap:45px}}
+    @media(max-width:620px){.container{width:min(100% - 30px,1120px)}section{padding:82px 0}.hero{padding:135px 0 75px}.hero h1{font-size:3rem}.actions{flex-direction:column}.btn{width:100%}.trust{display:grid;gap:14px}.portrait{min-height:440px;padding:18px}.portrait-inner{min-height:404px}.portrait blockquote{font-size:1.5rem}.values,.cards,.product-grid{grid-template-columns:1fr}.section-head{display:block}.contact-item{padding:16px}.contact-item b{word-break:break-word}.brand b{font-size:.75rem}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#inicio" aria-label="Erik Henrique Psicologia, início">
+      <span class="mark"><svg viewBox="0 0 64 64" fill="none" stroke="#72d6c8" stroke-width="3"><path d="M23 12c-8 0-13 7-11 14-6 4-5 14 2 17-1 8 8 13 15 8V17c-1-3-3-5-6-5Z"/><path d="M41 12c8 0 13 7 11 14 6 4 5 14-2 17 1 8-8 13-15 8V17c1-3 3-5 6-5Z"/><path d="M18 27h11M35 27h11M20 41l9-5M44 41l-9-5"/></svg></span>
+      <span><b>ERIK HENRIQUE</b><small>Psicologia</small></span>
+    </a>
+    <nav class="links" id="navLinks" aria-label="Navegação principal">
+      <a href="#inicio">Início</a><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#materiais">Materiais</a><a href="#contato">Contato</a>
+      https://wa.me/5535997416927?text=Olá%2C%20Erik.%20Conheci%20seu%20trabalho%20pelo%20site%20e%20gostaria%20de%20conversar.
+    </nav>
+    <button class="menu-btn" id="menuButton" aria-label="Abrir menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+<main>
+<section class="hero" id="inicio">
+  <svg class="neural" viewBox="0 0 700 650" fill="none" aria-hidden="true"><g stroke="#72d6c8" stroke-width="1.5"><path d="M65 175 212 75l145 118L530 76l115 112M60 370l170-91 134 112 170-116 120 92M103 559l140-93 150 100 139-105 116 96M212 75l18 204 13 187M357 193l7 198 29 175M530 76l4 199-2 186"/></g><g fill="#08282b" stroke="#72d6c8" stroke-width="2"><circle cx="65" cy="175" r="8"/><circle cx="212" cy="75" r="8"/><circle cx="357" cy="193" r="8"/><circle cx="530" cy="76" r="8"/><circle cx="645" cy="188" r="8"/><circle cx="60" cy="370" r="8"/><circle cx="230" cy="279" r="8"/><circle cx="364" cy="391" r="8"/><circle cx="534" cy="275" r="8"/><circle cx="654" cy="367" r="8"/><circle cx="103" cy="559" r="8"/><circle cx="243" cy="466" r="8"/><circle cx="393" cy="566" r="8"/><circle cx="532" cy="461" r="8"/><circle cx="648" cy="557" r="8"/></g></svg>
+  <div class="container hero-grid">
+    <div><div class="eyebrow light">Escuta, respeito e desenvolvimento</div><h1>Cuidado emocional para viver com mais <span>consciência.</span></h1><p>Um espaço dedicado ao autoconhecimento, ao desenvolvimento humano e à promoção da saúde emocional, com informação responsável e uma comunicação acolhedora.</p><div class="actions"><a class="btn btn-primary" href="https://wa.me/5535997416927?text=Olá%2C%20Erik.%20Conheci%20seu%20trabalho%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Agendar uma conversa →</a><a class="btn btn-outline" href="#sobre">Conhecer o trabalho</a></div><div class="trust"><span><i></i>Ética e respeito</span><span><i></i>Escuta humanizada</span></div></div>
+    <div class="brain-card" aria-hidden="true"><div class="brain-orbit"><svg viewBox="0 0 120 120" fill="none" stroke="#72d6c8" stroke-width="2"><path d="M43 19c-16 0-24 15-18 27-12 7-11 25 2 30-3 16 14 26 27 16V28c-1-6-5-9-11-9ZM77 19c16 0 24 15 18 27 12 7 11 25-2 30 3 16-14 26-27 16V28c1-6 5-9 11-9Z"/><path d="M34 46h20M66 46h20M36 71l18-10M84 71 66 61M38 85l16-8M82 85l-16-8"/></svg></div><div class="chip one"><strong>01</strong>Autoconhecimento</div><div class="chip two"><strong>02</strong>Bem-estar</div></div>
+  </div>
+</section>
+<section id="sobre"><div class="container about-grid"><div class="portrait"><div class="portrait-inner"><svg viewBox="0 0 64 64" fill="none" stroke="#72d6c8" stroke-width="2"><circle cx="14" cy="18" r="5"/><circle cx="49" cy="12" r="5"/><circle cx="52" cy="48" r="5"/><circle cx="17" cy="51" r="5"/><circle cx="33" cy="32" r="7"/><path d="m18 20 10 8m10-1 8-11M39 37l9 8m-21-8-7 10"/></svg><div><small>Propósito</small><blockquote>Informação que acolhe. Conhecimento que transforma.</blockquote></div></div></div><div class="about-copy"><div class="eyebrow">Sobre mim</div><h2>Erik Henrique Silva</h2><div class="role">Acadêmico de Psicologia • UNIFENAS</div><p>Acadêmico de Psicologia pela UNIFENAS, com experiência acadêmica em Psicologia Hospitalar Pediátrica e participação em projetos voltados à saúde mental e ao desenvolvimento humano.</p><p>Meu propósito é compartilhar conhecimento e contribuir para um espaço acolhedor, ético e humanizado, favorecendo o bem-estar emocional e a qualidade de vida.</p><div class="values"><div class="value">Acolhimento e empatia</div><div class="value">Respeito à singularidade</div><div class="value">Informação responsável</div><div class="value">Desenvolvimento humano</div></div></div></div></section>
+<section class="services" id="servicos"><div class="container"><div class="section-head"><div><div class="eyebrow">Como posso ajudar</div><h2>Caminhos para cuidar da mente e da vida.</h2></div><p>Conteúdos e iniciativas educativas que apoiam reflexões sobre saúde emocional, relações, rotina e desenvolvimento pessoal.</p></div><div class="cards"><article class="card"><div class="card-top"><span class="icon">♡</span><span class="num">01</span></div><h3>Saúde emocional</h3><p>Informação para compreender emoções e promover mais equilíbrio no cotidiano.</p><a href="#contato">Saiba mais →</a></article><article class="card"><div class="card-top"><span class="icon">◇</span><span class="num">02</span></div><h3>Desenvolvimento pessoal</h3><p>Recursos para ampliar o autoconhecimento e fortalecer habilidades internas.</p><a href="#contato">Saiba mais →</a></article><article class="card"><div class="card-top"><span class="icon">◎</span><span class="num">03</span></div><h3>Relacionamentos</h3><p>Reflexões para construir conexões mais conscientes, saudáveis e respeitosas.</p><a href="#contato">Saiba mais →</a></article><article class="card"><div class="card-top"><span class="icon">⌁</span><span class="num">04</span></div><h3>Qualidade de vida</h3><p>Estratégias educativas para uma rotina mais equilibrada e sustentável.</p><a href="#contato">Saiba mais →</a></article></div></div></section>
+<section class="products" id="materiais"><div class="container"><div class="eyebrow">Materiais digitais</div><h2>Conhecimento para levar com você.</h2><p style="max-width:680px;margin-top:20px">Área preparada para produtos digitais, guias e materiais educativos. Os produtos finais, preços e links de pagamento podem ser adicionados depois.</p><div class="product-grid"><article class="product"><div class="cover"><svg viewBox="0 0 64 64" fill="none" stroke="#72d6c8" stroke-width="2"><circle cx="12" cy="18" r="4"/><circle cx="48" cy="12" r="4"/><circle cx="52" cy="48" r="4"/><circle cx="18" cy="51" r="4"/><circle cx="32" cy="31" r="6"/><path d="m16 20 11 8m10-1 8-12m-8 20 12 10M27 36l-7 11"/></svg></div><small>Material educativo</small><h3>Guia de autocuidado</h3><p>Práticas simples para construir uma rotina mais consciente e equilibrada.</p><span class="soon">Em breve</span></article><article class="product"><div class="cover"><svg viewBox="0 0 64 64" fill="none" stroke="#72d6c8" stroke-width="2"><circle cx="12" cy="18" r="4"/><circle cx="48" cy="12" r="4"/><circle cx="52" cy="48" r="4"/><circle cx="18" cy="51" r="4"/><circle cx="32" cy="31" r="6"/><path d="m16 20 11 8m10-1 8-12m-8 20 12 10M27 36l-7 11"/></svg></div><small>Material educativo</small><h3>Caderno de autoconhecimento</h3><p>Perguntas e exercícios para apoiar reflexões sobre a própria trajetória.</p><span class="soon">Em breve</span></article><article class="product"><div class="cover"><svg viewBox="0 0 64 64" fill="none" stroke="#72d6c8" stroke-width="2"><circle cx="12" cy="18" r="4"/><circle cx="48" cy="12" r="4"/><circle cx="52" cy="48" r="4"/><circle cx="18" cy="51" r="4"/><circle cx="32" cy="31" r="6"/><path d="m16 20 11 8m10-1 8-12m-8 20 12 10M27 36l-7 11"/></svg></div><small>Material educativo</small><h3>Saúde emocional na prática</h3><p>Conteúdo educativo para compreender as emoções presentes no cotidiano.</p><span class="soon">Em breve</span></article></div></div></section>
+<section class="contact" id="contato"><div class="container contact-grid"><div><div class="eyebrow light">Entre em contato</div><h2>Vamos começar uma conversa?</h2><p>Entre em contato para conhecer os projetos, materiais e possibilidades de colaboração.</p><div class="actions"><a class="btn btn-primary" href="https://wa.me/5535997416927?text=Olá%2C%20Erik.%20Conheci%20seu%20trabalho%20pelo%20site%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Falar no WhatsApp</a></div></div><div class="contact-list"><a class="contact-item" href="https://wa.me/5535997416927" target="_blank" rel="noopener"><span class="icon">◌</span><span><small>Telefone</small><b>(35) 99741-6927</b></span></a><a class="contact-item" href="mailto:erikhriq2@gmail.com"><span class="icon">@</span><span><small>E-mail</small><b>erikhriq2@gmail.com</b></span></a><div class="contact-item"><span class="icon">⌖</span><span><small>Localização</small><b>Alfenas • Minas Gerais</b></span></div></div></div></section>
+</main>
+<footer><div class="container foot"><span>© 2026 Erik Henrique Psicologia</span><p>Conteúdo de caráter educativo. Este site não substitui avaliação, diagnóstico ou acompanhamento realizado por profissional habilitado. Em situações de emergência, procure um serviço de saúde da sua região.</p></div></footer>
+<script>
+  const button=document.getElementById('menuButton');
+  const links=document.getElementById('navLinks');
+  button.addEventListener('click',()=>{const open=links.classList.toggle('open');button.setAttribute('aria-expanded',String(open));button.textContent=open?'×':'☰';});
+  links.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{links.classList.remove('open');button.setAttribute('aria-expanded','false');button.textContent='☰';}));
+</script>
+</body>
+</html>
