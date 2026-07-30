@@ -1,433 +1,453 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Erik Henrique Silva | Psicologia</title>
+<title>Erik Henrique Psicologia</title>
 
-=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link relonts.googleapis.com
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https:/t">
+
+https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+
 :root{
-    --primary:#2F5D62;
-    --secondary:#5E8B7E;
-    --accent:#A7C4BC;
-    --light:#F6F9F8;
-    --white:#FFFFFF;
-    --dark:#233238;
+--primary:#1f5e5b;
+--secondary:#79b8ad;
+--light:#f7f9f8;
+--dark:#1f2937;
+--white:#ffffff;
 }
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-    font-family:'Poppins', sans-serif;
-    background:var(--light);
-    color:var(--dark);
-    line-height:1.7;
+background:var(--light);
+color:var(--dark);
 }
 
 .container{
-    width:90%;
-    max-width:1200px;
-    margin:auto;
+width:90%;
+max-width:1200px;
+margin:auto;
 }
 
 header{
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    color:white;
-    min-height:100vh;
-    display:flex;
-    align-items:center;
+position:fixed;
+width:100%;
+top:0;
+background:rgba(255,255,255,.95);
+backdrop-filter:blur(10px);
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,.05);
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 0;
+}
+
+.logo{
+font-size:22px;
+font-weight:700;
+color:var(--primary);
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:#444;
+font-weight:500;
 }
 
 .hero{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:50px;
-    align-items:center;
+min-height:100vh;
+background:linear-gradient(135deg,#1f5e5b,#79b8ad);
+display:flex;
+align-items:center;
+color:white;
+padding-top:80px;
 }
 
-.hero-content h1{
-    font-size:3.5rem;
-    margin-bottom:10px;
+.hero-content{
+max-width:700px;
 }
 
-.hero-content h2{
-    font-weight:400;
-    margin-bottom:25px;
-    color:#dff5ef;
+.hero h1{
+font-size:4rem;
+margin-bottom:20px;
+line-height:1.1;
 }
 
-.hero-content p{
-    margin-bottom:30px;
-    font-size:1.1rem;
+.hero p{
+font-size:1.2rem;
+margin-bottom:35px;
+opacity:.95;
 }
 
 .btn{
-    display:inline-block;
-    padding:14px 28px;
-    background:white;
-    color:var(--primary);
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:600;
-    transition:.3s;
-    margin-right:10px;
+display:inline-block;
+padding:15px 30px;
+background:white;
+color:var(--primary);
+text-decoration:none;
+border-radius:50px;
+font-weight:600;
+margin-right:15px;
+transition:.3s;
 }
 
 .btn:hover{
-    transform:translateY(-3px);
-}
-
-.btn-outline{
-    background:transparent;
-    border:2px solid white;
-    color:white;
-}
-
-.hero-card{
-    background:rgba(255,255,255,0.12);
-    backdrop-filter: blur(10px);
-    padding:40px;
-    border-radius:20px;
-}
-
-.hero-card ul{
-    list-style:none;
-}
-
-.hero-card li{
-    margin-bottom:15px;
+transform:translateY(-3px);
 }
 
 section{
-    padding:90px 0;
+padding:100px 0;
 }
 
 .section-title{
-    text-align:center;
-    margin-bottom:50px;
+text-align:center;
+margin-bottom:60px;
 }
 
 .section-title h2{
-    font-size:2.3rem;
-    color:var(--primary);
+font-size:2.3rem;
+color:var(--primary);
 }
 
 .about{
-    background:white;
+background:white;
 }
 
-.about-content{
-    max-width:900px;
-    margin:auto;
-    text-align:center;
-    font-size:1.05rem;
+.about-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:center;
+}
+
+.about-card{
+background:#eef5f3;
+padding:40px;
+border-radius:24px;
+}
+
+.about-card i{
+font-size:40px;
+color:var(--primary);
+margin-bottom:20px;
 }
 
 .cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
 }
 
 .card{
-    background:white;
-    border-radius:20px;
-    padding:35px;
-    box-shadow:0 10px 30px rgba(0,0,0,.07);
-    transition:.3s;
+background:white;
+padding:35px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.05);
+transition:.3s;
 }
 
 .card:hover{
-    transform:translateY(-5px);
+transform:translateY(-5px);
+}
+
+.card i{
+font-size:35px;
+margin-bottom:20px;
+color:var(--primary);
 }
 
 .card h3{
-    color:var(--primary);
-    margin-bottom:15px;
+margin-bottom:10px;
 }
 
-.timeline{
-    display:grid;
-    gap:20px;
-}
-
-.timeline-item{
-    background:white;
-    padding:30px;
-    border-left:5px solid var(--secondary);
-    border-radius:12px;
-    box-shadow:0 5px 20px rgba(0,0,0,.05);
-}
-
-.skills{
-    background:white;
-}
-
-.skills ul{
-    list-style:none;
-    max-width:850px;
-    margin:auto;
-}
-
-.skills li{
-    margin-bottom:15px;
-    padding:20px;
-    background:#f3f7f6;
-    border-radius:10px;
+.benefits{
+background:white;
 }
 
 .contact{
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
-    color:white;
-    text-align:center;
-}
-
-.contact h2{
-    margin-bottom:20px;
+background:linear-gradient(135deg,#1f5e5b,#79b8ad);
+color:white;
+text-align:center;
 }
 
 .contact p{
-    margin-bottom:10px;
+margin:10px 0;
+font-size:18px;
 }
 
-footer{
-    background:#18343b;
-    color:white;
-    text-align:center;
-    padding:25px;
+.footer{
+background:#173b39;
+text-align:center;
+color:white;
+padding:25px;
 }
 
 .whatsapp{
-    position:fixed;
-    right:25px;
-    bottom:25px;
-    background:#25d366;
-    color:white;
-    width:65px;
-    height:65px;
-    text-decoration:none;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
+position:fixed;
+right:25px;
+bottom:25px;
+width:65px;
+height:65px;
+background:#25D366;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:30px;
+color:white;
+text-decoration:none;
+box-shadow:0 10px 20px rgba(0,0,0,.25);
+z-index:1000;
 }
 
 @media(max-width:900px){
 
-.hero{
-    grid-template-columns:1fr;
+.hero h1{
+font-size:2.5rem;
 }
 
-.hero-content h1{
-    font-size:2.5rem;
+.about-grid{
+grid-template-columns:1fr;
 }
 
-.hero-card{
-    margin-top:20px;
+.nav-links{
+display:none;
 }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-    <div class="container hero">
 
-        <div class="hero-content">
-            <h1>Erik Henrique Silva</h1>
+<div class="container navbar">
 
-            <h2>Acadêmico de Psicologia • UNIFENAS</h2>
+<div class="logo">
+Erik Henrique Psicologia
+</div>
 
-            <p>
-                Um espaço voltado ao acolhimento, escuta qualificada,
-                desenvolvimento emocional e promoção da saúde mental.
-            </p>
+<div class="nav-links">
+#inicio>
+#sobre
+">Atendimento</a>
+#beneficiosBenefícios</a>
+#contato
+</div>
 
-            7416927" class="btn">
-                Falar no WhatsApp
-            </a>
+</div>
 
-            #contato
-                Entrar em Contato
-            </a>
-        </div>
-
-        <div class="hero-card">
-            <h3>Experiência em:</h3>
-            <ul>
-                <li>✓ Psicologia Hospitalar Pediátrica</li>
-                <li>✓ Saúde Mental</li>
-                <li>✓ Desenvolvimento Infantil</li>
-                <li>✓ Psicoeducação</li>
-                <li>✓ Escuta Terapêutica</li>
-                <li>✓ Projetos de Extensão Universitária</li>
-            </ul>
-        </div>
-
-    </div>
 </header>
 
-<section class="about">
-    <div class="container">
+<section class="hero" id="inicio">
 
-        <div class="section-title">
-            <h2>Sobre Mim</h2>
-        </div>
+<div class="container">
 
-        <div class="about-content">
-            <p>
-                Sou Erik Henrique Silva, acadêmico de Psicologia pela UNIFENAS.
-                Minha trajetória envolve atuação em projetos de saúde mental,
-                psicologia hospitalar pediátrica e desenvolvimento socioemocional.
-                Acredito que cada pessoa possui uma história única e merece um
-                espaço seguro de acolhimento, respeito e crescimento.
-            </p>
-        </div>
+<div class="hero-content">
 
-    </div>
+<h1>
+Cuidado psicológico com acolhimento e respeito.
+</h1>
+
+<p>
+Um espaço dedicado ao bem-estar emocional, desenvolvimento pessoal
+e fortalecimento da saúde mental.
+</p>
+
+https://wa.me/5535997416927" target="_blank" class="btn">
+Agendar Conversa
+</a>
+
+</div>
+
+</div>
+
 </section>
 
-<section>
-    <div class="container">
+<section id="sobre" class="about">
 
-        <div class="section-title">
-            <h2>Áreas de Interesse</h2>
-        </div>
+<div class="container">
 
-        <div class="cards">
+<div class="section-title">
+<h2>Sobre Mim</h2>
+</div>
 
-            <div class="card">
-                <h3>Saúde Mental</h3>
-                <p>
-                    Promoção do bem-estar emocional e desenvolvimento de
-                    estratégias para lidar com desafios cotidianos.
-                </p>
-            </div>
+<div class="about-grid">
 
-            <div class="card">
-                <h3>Psicologia Infantil</h3>
-                <p>
-                    Experiência em ambiente hospitalar pediátrico e atividades
-                    voltadas ao desenvolvimento infantil.
-                </p>
-            </div>
+<div>
+<h3 style="font-size:32px;margin-bottom:20px;color:#1f5e5b;">
+Erik Henrique Silva
+</h3>
 
-            <div class="card">
-                <h3>Psicoeducação</h3>
-                <p>
-                    Ações educativas sobre saúde mental, emoções,
-                    comportamento e qualidade de vida.
-                </p>
-            </div>
+<p>
+Acadêmico de Psicologia pela UNIFENAS, com experiência em Psicologia
+Hospitalar Pediátrica e participação em projetos de extensão voltados
+à saúde mental.
+</p>
 
-        </div>
+<br>
 
-    </div>
+<p>
+Minha proposta é oferecer um espaço acolhedor, ético e humanizado,
+onde cada pessoa possa desenvolver autoconhecimento, equilíbrio
+emocional e qualidade de vida.
+</p>
+
+</div>
+
+<div class="about-card">
+<i class="fa-solid fa-brain"></i>
+<h3>Escuta Humanizada</h3>
+<p>
+Atendimento baseado no respeito à individualidade,
+acolhimento e construção de confiança.
+</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<section>
-    <div class="container">
+<section id="atendimento">
 
-        <div class="section-title">
-            <h2>Experiência Profissional</h2>
-        </div>
+<div class="container">
 
-        <div class="timeline">
+<div class="section-title">
+<h2>Áreas de Atuação</h2>
+</div>
 
-            <div class="timeline-item">
-                <h3>Hospital Alzira Velano</h3>
-                <p>
-                    Estágio em Psicologia Hospitalar Pediátrica com acolhimento,
-                    suporte psicossocial e participação em equipe multidisciplinar.
-                </p>
-            </div>
+<div class="cards">
 
-            <div class="timeline-item">
-                <h3>UNIFENAS</h3>
-                <p>
-                    Pesquisador e palestrante em projetos de extensão voltados
-                    para saúde mental e tecnologia.
-                </p>
-            </div>
+<div class="card">
+<i class="fa-solid fa-brain"></i>
+<h3>Ansiedade</h3>
+<p>Desenvolvimento de estratégias para lidar com desafios emocionais.</p>
+</div>
 
-            <div class="timeline-item">
-                <h3>Rede do Campo</h3>
-                <p>
-                    Representação institucional, alinhamento estratégico e
-                    participação em fóruns de desenvolvimento organizacional.
-                </p>
-            </div>
+<div class="card">
+<i class="fa-solid fa-heart"></i>
+<h3>Autoestima</h3>
+<p>Fortalecimento da autoconfiança e valorização pessoal.</p>
+</div>
 
-        </div>
+<div class="card">
+<i class="fa-solid fa-seedling"></i>
+<h3>Desenvolvimento Pessoal</h3>
+<p>Promoção de autoconhecimento e crescimento emocional.</p>
+</div>
 
-    </div>
+<div class="card">
+<i class="fa-solid fa-comments"></i>
+<h3>Relacionamentos</h3>
+<p>Aprimoramento da comunicação e dos vínculos interpessoais.</p>
+</div>
+
+</div>
+
+</div>
+
 </section>
 
-<section class="skills">
+<section id="beneficios" class="benefits">
 
-    <div class="container">
+<div class="container">
 
-        <div class="section-title">
-            <h2>Competências</h2>
-        </div>
+<div class="section-title">
+<h2>Diferenciais</h2>
+</div>
 
-        <ul>
-            <li>Escuta Terapêutica e Acolhimento Humanizado</li>
-            <li>Psicologia do Desenvolvimento</li>
-            <li>Mediação de Conflitos</li>
-            <li>Psicoeducação</li>
-            <li>Comunicação Assertiva</li>
-            <li>Planejamento Estratégico e Organização</li>
-        </ul>
+<div class="cards">
 
-    </div>
+<div class="card">
+<i class="fa-solid fa-shield-heart"></i>
+<h3>Sigilo e Ética</h3>
+<p>Atendimento pautado em respeito, responsabilidade e confidencialidade.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-hand-holding-heart"></i>
+<h3>Acolhimento</h3>
+<p>Ambiente seguro para escuta e desenvolvimento emocional.</p>
+</div>
+
+<div class="card">
+<i class="fa-solid fa-leaf"></i>
+<h3>Bem-estar</h3>
+<p>Foco no equilíbrio emocional e qualidade de vida.</p>
+</div>
+
+</div>
+
+</div>
 
 </section>
 
 <section id="contato" class="contact">
 
-    <div class="container">
+<div class="container">
 
-        <h2>Entre em Contato</h2>
+<h2 style="margin-bottom:20px;">
+Entre em Contato
+</h2>
 
-        <p><strong>WhatsApp:</strong> (35) 99741-6927</p>
-        <p><strong>E-mail:</strong> erikhriq2@gmail.com</p>
-        <p><strong>Localização:</strong> Alfenas - Minas Gerais</p>
+<p>
+<i class="fa-brands fa-whatsapp"></i>
+(35) 99741-6927
+</p>
 
-        <br>
+<p>
+<i class="fa-solid fa-envelope"></i>
+erikhriq2@gmail.com
+</p>
 
-        .me/5535997416927" class="btn">
-            Iniciar Conversa
-        </a>
+<p>
+<i class="fa-solid fa-location-dot"></i>
+Alfenas • Minas Gerais
+</p>
 
-    </div>
+<br>
+
+https://wa.me/5535997416927
+Falar pelo WhatsApp
+</a>
+
+</div>
 
 </section>
 
-<footer>
-    <p>
-        © 2026 Erik Henrique Silva | Acadêmico de Psicologia - UNIFENAS
-    </p>
+<footer class="footer">
+© 2026 Erik Henrique Psicologia
 </footer>
 
-/5535997416927"
-class="whatsapp"
-target="_blank">
-💬
+https://wa.me/5535997416927
+<i class="fab fa-whatsapp"></i>
 </a>
 
 </body>
