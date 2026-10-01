@@ -6,6 +6,8 @@ const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 const br=s=>s.split('-').reverse().join('/');
 const hm=ts=>new Date(ts).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+const full=ts=>new Date(ts).toLocaleString('pt-BR');
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 const DIAS=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
 const HORAS=Array.from({length:12},(_,i)=>String(i+8).padStart(2,'0')+':00');
 const PSI_PHONE='5535997416927';
@@ -27,4 +29,4 @@ const Auth={
 const Appt={all:()=>DB.get('appts',[]),save:a=>DB.set('appts',a),taken:(d,h)=>Appt.all().some(a=>a.date===d&&a.time===h&&['pendente','confirmada'].includes(a.status))};
 const Chat={thread:pid=>DB.get('msgs',[]).filter(m=>m.pid===pid),send(pid,from,text){const l=DB.get('msgs',[]);l.push({id:uid(),pid,from,text,ts:Date.now()});DB.set('msgs',l)}};
 function chatHTML(pid,me){return Chat.thread(pid).map(m=>`<div class="msg ${m.from===me?'me':''}">${esc(m.text)}<small>${hm(m.ts)}</small></div>`).join('')||'<div class="empty">Nenhuma mensagem ainda.</div>'}
-function topbar(u,sub){return `<header class="top"><div class="wrap in"><a class="brand" href="index.html"><span class="mark">${LOGO}</span><span><b>ERIK HENRIQUE</b><small>${sub}</small></span></a><div class="who"><span>${esc(u.nome)}</span><a class="btn sm line" style="color:#fff;border-color:rgba(255,255,255,.3)" href="index.html">Site</a><button class="btn sm mint" onclick="Auth.logout()">Sair</button></div></div></header>`}
+function topbar(u,sub){const nm=u.role==='psicologo'&&!/^dr/i.test(u.nome)?'Dr. '+u.nome:u.nome;return `<header class="top"><div class="wrap in"><a class="brand" href="index.html"><span class="mark">${LOGO}</span><span><b>DR. ERIK HENRIQUE</b><small>${sub}</small></span></a><div class="who"><span>${esc(nm)}</span><a class="btn sm line" style="color:#fff;border-color:rgba(255,255,255,.3)" href="index.html">Site</a><button class="btn sm mint" onclick="Auth.logout()">Sair</button></div></div></header>`}
