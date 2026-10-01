@@ -25,13 +25,7 @@ $('#inicio').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const
 function notify(a){
   const p=pat(a.pid),ok=a.status==='confirmada';
   const msg=ok?`Olá, ${p.nome}! Sua consulta com Erik Henrique foi confirmada para ${when(a)}. Até lá!`:`Olá, ${p.nome}! Infelizmente não consigo atender em ${when(a)}. Pode escolher outro horário na agenda do site.`;
-  $('#notify').innerHTML=`<div class="notice"><b>${ok?'Consulta confirmada':'Solicitação recusada'}.</b> Avise ${esc(p.nome)}:<div class="acts"><a class="btn sm mint" target="_blank" rel="noopener" href="${wa(p.tel,msg)}">Enviar WhatsApp</a><a class="btn sm" href="mailto:${esc(p.email)}?subject=${encodeURIComponent(ok?'Consulta confirmada':'Sobre sua solicitação de consulta')}&body=${encodeURIComponent(msg)}">Enviar e-mail</a></div><small id="auto"></small></div>`;
-  const key=sessionStorage.getItem('adminKey')||prompt('Chave de administrador para envio automático (cancele para enviar manualmente):');
-  if(!key)return;sessionStorage.setItem('adminKey',key);
-  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json','x-admin-key':key},body:JSON.stringify({tipo:'resposta',status:a.status,nome:p.nome,email:p.email,tel:p.tel,data:a.date,hora:a.time})})
-   .then(r=>{if(r.status===401){sessionStorage.removeItem('adminKey');throw 0}return r.json()})
-   .then(j=>{$('#auto').textContent=`Envio automático: WhatsApp ${j.whatsapp?'✓':'✗'} • E-mail ${j.email?'✓':'✗'}`})
-   .catch(()=>{$('#auto').textContent='Envio automático falhou. Use os botões acima.'});
+  $('#notify').innerHTML=`<div class="notice"><b>${ok?'Consulta confirmada':'Solicitação recusada'}.</b> Avise ${esc(p.nome)}:<div class="acts"><a class="btn sm mint" target="_blank" rel="noopener" href="${wa(p.tel,msg)}">Enviar WhatsApp</a><a class="btn sm" href="mailto:${esc(p.email)}?subject=${encodeURIComponent(ok?'Consulta confirmada':'Sobre sua solicitação de consulta')}&body=${encodeURIComponent(msg)}">Enviar e-mail</a></div></div>`;
 }
 function agenda(){
   const av=DB.get('avail',{}),hoje=iso(new Date()),prox=Appt.all().filter(a=>a.status==='confirmada'&&a.date>=hoje).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
