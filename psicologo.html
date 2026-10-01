@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CRM | Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
+<body><div id="top"></div>
+<main class="wrap" style="padding-bottom:70px">
+  <div class="tabs"><button class="on" data-t="inicio">Solicitações</button><button data-t="agenda">Agenda</button><button data-t="pacientes">Pacientes</button><button data-t="chat">Chat</button><button data-t="rel">Relatórios</button></div>
+  <div id="notify"></div>
+  <section id="inicio"></section><section id="agenda" hidden></section><section id="pacientes" hidden></section>
+  <section id="chat" hidden></section><section id="rel" hidden></section>
+</main>
+<script src="assets/app.js"></script>
+<script>
+const me=Auth.require('psicologo');$('#top').innerHTML=topbar(me,'Painel do psicólogo');
+const pats=()=>DB.get('users',[]).filter(u=>u.role==='paciente');
+const pat=id=>pats().find(p=>p.id===id)||{nome:'(removido)',email:'',tel:''};
+const when=a=>`${br(a.date)} às ${a.time}`;
+let curChat=null,curRel=null;
+
+function inicio(){
+  const all=Appt.all(),pend=all.filter(a=>a.status==='pendente').sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),
+  hoje=iso(new Date()),prox=all.filter(a=>a.status==='confirmada'&&a.date>=hoje).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  $('#inicio').innerHTML=`<div class="stat"><div><b>${pend.length}</b><span>Pendentes</span></div><div><b>${prox.length}</b><span>Confirmadas</span></div><div><b>${pats().length}</b><span>Pacientes</span></div></div>
+  <div class="card"><div class="eyebrow">Aguardando você</div>${pend.map(a=>`<div class="row"><div><b>${esc(pat(a.pid).nome)}</b><small>${when(a)}</small></div><div><button class="btn sm mint" data-s="confirmada" data-id="${a.id}">Aceitar</button> <button class="btn sm danger" data-s="recusada" data-id="${a.id}">Recusar</button></div></div>`).join('')||'<div class="empty">Nenhuma solicitação pendente.</div>'}</div>`;
+}
+$('#inicio').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const l=Appt.all(),a=l.find(x=>x.id===b.dataset.id);a.status=b.dataset.s;Appt.save(l);notify(a);inicio();agenda()};
+function notify(a){
+  const p=pat(a.pid),ok=a.status==='confirmada';
+  const msg=ok?`Olá, ${p.nome}! Sua consulta com Erik Henrique foi confirmada para ${when(a)}. Até lá!`:`Olá, ${p.nome}! Infelizmente não consigo atender em ${when(a)}. Pode escolher outro horário na agenda do site.`;
+  $('#notify').innerHTML=`<div class="notice"><b>${ok?'Consulta confirmada':'Solicitação recusada'}.</b> Avise ${esc(p.nome)}:<div class="acts"><a class="btn sm mint" target="_blank" rel="noopener" href="${wa(p.tel,msg)}">Enviar WhatsApp</a><a class="btn sm" href="mailto:${esc(p.email)}?subject=${encodeURIComponent(ok?'Consulta confirmada':'Sobre sua solicitação de consulta')}&body=${encodeURIComponent(msg)}">Enviar e-mail</a></div></div>`;
+}
+function agenda(){
+  const av=DB.get('avail',{}),hoje=iso(new Date()),prox=Appt.all().filter(a=>a.status==='confirmada'&&a.date>=hoje).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  $('#agenda').innerHTML=`<div class="card"><div class="eyebrow">Meus horários disponíveis</div><div class="av">${[1,2,3,4,5,6,0].map(d=>`<b>${DIAS[d]}</b><div class="hrs">${HORAS.map(h=>`<label><input type="checkbox" data-d="${d}" data-h="${h}" ${(av[d]||[]).includes(h)?'checked':''}>${h}</label>`).join('')}</div>`).join('')}</div></div>
+  <div class="card" style="margin-top:20px"><div class="eyebrow">Próximas consultas</div>${prox.map(a=>`<div class="row"><div><b>${esc(pat(a.pid).nome)}</b><small>${when(a)}</small></div><button class="btn sm danger" data-x="${a.id}">Cancelar</button></div>`).join('')||'<div class="empty">Nenhuma consulta confirmada.</div>'}</div>`;
+}
+$('#agenda').onchange=e=>{const t=e.target;if(!t.dataset.h)return;const av=DB.get('avail',{}),s=new Set(av[t.dataset.d]||[]);t.checked?s.add(t.dataset.h):s.delete(t.dataset.h);av[t.dataset.d]=[...s].sort();DB.set('avail',av)};
+$('#agenda').onclick=e=>{const id=e.target.dataset.x;if(!id||!confirm('Cancelar esta consulta?'))return;const l=Appt.all(),a=l.find(x=>x.id===id);a.status='cancelada';Appt.save(l);notify(a);agenda();inicio()};
+function pacientes(){
+  $('#pacientes').innerHTML=`<div class="card"><div class="eyebrow">Pacientes</div>${pats().map(p=>`<div class="row"><div><b>${esc(p.nome)}</b><small>${esc(p.idade)} anos • ${esc(p.tel)} • ${esc(p.email)}</small></div><div><button class="btn sm line" data-chat="${p.id}">Chat</button> <button class="btn sm" data-rel="${p.id}">Relatório</button></div></div>`).join('')||'<div class="empty">Nenhum paciente cadastrado.</div>'}</div>`;
+}
+$('#pacientes').onclick=e=>{if(e.target.dataset.chat){curChat=e.target.dataset.chat;show('chat')}if(e.target.dataset.rel){curRel=e.target.dataset.rel;show('rel')}};
+function chat(){
+  curChat=curChat||(pats()[0]||{}).id;
+  $('#chat').innerHTML=`<div class="side"><div class="plist">${pats().map(p=>`<button class="${p.id===curChat?'on':''}" data-p="${p.id}">${esc(p.nome)}</button>`).join('')||'<div class="empty">Sem pacientes.</div>'}</div><div class="card chat"><div class="msgs" id="msgs">${curChat?chatHTML(curChat,'e'):''}</div>${curChat?'<form id="cf"><input id="ci" placeholder="Responder..." required><button class="btn">Enviar</button></form>':''}</div></div>`;
+  const m=$('#msgs');m.scrollTop=m.scrollHeight;
+}
+$('#chat').onclick=e=>{const b=e.target.closest('[data-p]');if(b){curChat=b.dataset.p;chat()}};
+$('#chat').onsubmit=e=>{e.preventDefault();Chat.send(curChat,'e',$('#ci').value.trim());chat()};
+function rel(){
+  const ps=pats();curRel=curRel||(ps[0]||{}).id;const notes=DB.get('notes',{})[curRel]||[],ap=Appt.all().filter(a=>a.pid===curRel).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  const p=pat(curRel),n=s=>ap.filter(a=>a.status===s).length;
+  $('#rel').innerHTML=!curRel?'<div class="card empty">Nenhum paciente.</div>':`<div class="side"><div class="plist">${ps.map(x=>`<button class="${x.id===curRel?'on':''}" data-p="${x.id}">${esc(x.nome)}</button>`).join('')}</div><div>
+  <div class="card"><div class="eyebrow">Relatório do paciente</div><h2 style="font-size:1.8rem">${esc(p.nome)}</h2><p>${esc(p.idade)} anos • ${esc(p.tel)} • ${esc(p.email)}</p>
+  <div class="stat" style="margin-top:18px"><div><b>${n('confirmada')}</b><span>Confirmadas</span></div><div><b>${n('pendente')}</b><span>Pendentes</span></div><div><b>${n('cancelada')+n('recusada')}</b><span>Canceladas</span></div></div>
+  ${ap.map(a=>`<div class="row"><b>${when(a)}</b><span class="badge ${a.status}">${a.status}</span></div>`).join('')}</div>
+  <div class="card" style="margin-top:20px"><div class="eyebrow">Anotações da sessão</div><form id="nf"><textarea id="nt" rows="4" placeholder="Evolução, observações, plano..." required></textarea><button class="btn mint" style="margin-top:10px">Salvar anotação</button></form>${notes.slice().reverse().map(x=>`<div class="note"><small>${hm(x.ts)}</small><p style="color:var(--ink);white-space:pre-wrap">${esc(x.text)}</p></div>`).join('')}</div></div></div>`;
+}
+$('#rel').onclick=e=>{const b=e.target.closest('[data-p]');if(b){curRel=b.dataset.p;rel()}};
+$('#rel').onsubmit=e=>{e.preventDefault();const all=DB.get('notes',{});(all[curRel]=all[curRel]||[]).push({ts:Date.now(),text:$('#nt').value.trim()});DB.set('notes',all);rel()};
+const R={inicio,agenda,pacientes,chat,rel};
+function show(t){$$('.tabs button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));Object.keys(R).forEach(k=>$('#'+k).hidden=k!==t);R[t]()}
+$$('.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.t));
+addEventListener('storage',()=>{if(!$('#inicio').hidden)inicio();if(!$('#chat').hidden)chat()});
+setInterval(()=>{if(!$('#chat').hidden&&document.activeElement.id!=='ci')chat()},4000);
+inicio();
+</script></body></html>

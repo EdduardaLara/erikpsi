@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login | Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
+<body style="background:var(--deep)">
+<div class="wrap" style="max-width:480px;padding:50px 0">
+  <a class="brand" href="index.html" style="color:#fff;margin-bottom:26px"><span class="mark" id="logo"></span><span><b>ERIK HENRIQUE</b><small>Psicólogo</small></span></a>
+  <div class="card">
+    <div class="tabs" style="margin-top:0"><button class="on" data-m="in">Entrar</button><button data-m="up">Cadastrar</button></div>
+    <form id="fIn"><label>E-mail</label><input type="email" name="email" required autocomplete="email"><label>Senha</label><input type="password" name="senha" required autocomplete="current-password"><div class="err" id="eIn"></div><button class="btn mint" style="width:100%;margin-top:8px">Entrar →</button></form>
+    <form id="fUp" hidden><label>Nome completo</label><input name="nome" required>
+      <div class="grid2"><div><label>Idade</label><input type="number" name="idade" min="1" max="120" required></div><div><label>Telefone (WhatsApp)</label><input type="tel" name="tel" placeholder="(35) 99999-9999" required></div></div>
+      <label>E-mail</label><input type="email" name="email" required><label>Senha</label><input type="password" name="senha" minlength="6" required><div class="err" id="eUp"></div><button class="btn mint" style="width:100%;margin-top:8px">Criar conta →</button></form>
+  </div>
+  <p style="color:#8fa6a6;font-size:.78rem;margin-top:18px;text-align:center">Psicólogo: use seu e-mail e senha na aba "Entrar".</p>
+</div>
+<script src="assets/app.js"></script>
+<script>
+$('#logo').innerHTML=LOGO;
+const go=u=>location.href=u.role==='psicologo'?'psicologo.html':'paciente.html';
+if(Auth.user())go(Auth.user());
+$$('.tabs button').forEach(b=>b.onclick=()=>{$$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));$('#fIn').hidden=b.dataset.m!=='in';$('#fUp').hidden=b.dataset.m!=='up'});
+$('#fIn').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),u=Auth.login(f.get('email'),f.get('senha'));u?go(u):$('#eIn').textContent='E-mail ou senha incorretos.'};
+$('#fUp').onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(e.target)),u=Auth.register(d);u?go(u):$('#eUp').textContent='Este e-mail já está cadastrado.'};
+</script></body></html>
