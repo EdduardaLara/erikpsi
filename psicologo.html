@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CRM | Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CRM | Dr. Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
 <body><div id="top"></div>
 <main class="wrap" style="padding-bottom:70px">
-  <div class="tabs"><button class="on" data-t="inicio">Solicitações</button><button data-t="agenda">Agenda</button><button data-t="pacientes">Pacientes</button><button data-t="chat">Chat</button><button data-t="rel">Relatórios</button></div>
+  <div class="tabs"><button class="on" data-t="inicio">Solicitações</button><button data-t="agenda">Agenda</button><button data-t="pacientes">Pacientes</button><button data-t="chat">Chat</button><button data-t="rel">Relatórios</button><button data-t="bkp">Backup</button></div>
+  <div style="margin:-8px 0 16px"><button class="btn sm line" id="somBtn"></button> <small style="color:#7a8b8d">Mantenha esta página aberta. Clique em qualquer lugar uma vez para liberar o som do navegador.</small></div>
   <div id="notify"></div>
   <section id="inicio"></section><section id="agenda" hidden></section><section id="pacientes" hidden></section>
-  <section id="chat" hidden></section><section id="rel" hidden></section>
+  <section id="chat" hidden></section><section id="rel" hidden></section><section id="bkp" hidden></section>
 </main>
 <script src="assets/app.js"></script>
 <script>
@@ -24,7 +25,7 @@ function inicio(){
 $('#inicio').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const l=Appt.all(),a=l.find(x=>x.id===b.dataset.id);a.status=b.dataset.s;Appt.save(l);notify(a);inicio();agenda()};
 function notify(a){
   const p=pat(a.pid),ok=a.status==='confirmada';
-  const msg=ok?`Olá, ${p.nome}! Sua consulta com Erik Henrique foi confirmada para ${when(a)}. Até lá!`:`Olá, ${p.nome}! Infelizmente não consigo atender em ${when(a)}. Pode escolher outro horário na agenda do site.`;
+  const msg=ok?`Olá, ${p.nome}! Sua consulta com o Dr. Erik Henrique foi confirmada para ${when(a)}. Até lá!`:`Olá, ${p.nome}! Infelizmente não consigo atender em ${when(a)}. Pode escolher outro horário na agenda do site.`;
   $('#notify').innerHTML=`<div class="notice"><b>${ok?'Consulta confirmada':'Solicitação recusada'}.</b> Avise ${esc(p.nome)}:<div class="acts"><a class="btn sm mint" target="_blank" rel="noopener" href="${wa(p.tel,msg)}">Enviar WhatsApp</a><a class="btn sm" href="mailto:${esc(p.email)}?subject=${encodeURIComponent(ok?'Consulta confirmada':'Sobre sua solicitação de consulta')}&body=${encodeURIComponent(msg)}">Enviar e-mail</a></div></div>`;
 }
 function agenda(){
@@ -49,17 +50,61 @@ function rel(){
   const ps=pats();curRel=curRel||(ps[0]||{}).id;const notes=DB.get('notes',{})[curRel]||[],ap=Appt.all().filter(a=>a.pid===curRel).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
   const p=pat(curRel),n=s=>ap.filter(a=>a.status===s).length;
   $('#rel').innerHTML=!curRel?'<div class="card empty">Nenhum paciente.</div>':`<div class="side"><div class="plist">${ps.map(x=>`<button class="${x.id===curRel?'on':''}" data-p="${x.id}">${esc(x.nome)}</button>`).join('')}</div><div>
-  <div class="card"><div class="eyebrow">Relatório do paciente</div><h2 style="font-size:1.8rem">${esc(p.nome)}</h2><p>${esc(p.idade)} anos • ${esc(p.tel)} • ${esc(p.email)}</p>
+  <div class="card"><div style="display:flex;gap:8px;flex-wrap:wrap;float:right"><button class="btn sm" data-pdf="one">PDF deste paciente</button><button class="btn sm line" data-pdf="all">PDF de todos</button></div><div class="eyebrow">Relatório do paciente</div><h2 style="font-size:1.8rem">${esc(p.nome)}</h2><p>${esc(p.idade)} anos • ${esc(p.tel)} • ${esc(p.email)}</p>
   <div class="stat" style="margin-top:18px"><div><b>${n('confirmada')}</b><span>Confirmadas</span></div><div><b>${n('pendente')}</b><span>Pendentes</span></div><div><b>${n('cancelada')+n('recusada')}</b><span>Canceladas</span></div></div>
   ${ap.map(a=>`<div class="row"><b>${when(a)}</b><span class="badge ${a.status}">${a.status}</span></div>`).join('')}</div>
   <div class="card" style="margin-top:20px"><div class="eyebrow">Anotações da sessão</div><form id="nf"><textarea id="nt" rows="4" placeholder="Evolução, observações, plano..." required></textarea><button class="btn mint" style="margin-top:10px">Salvar anotação</button></form>${notes.slice().reverse().map(x=>`<div class="note"><small>${hm(x.ts)}</small><p style="color:var(--ink);white-space:pre-wrap">${esc(x.text)}</p></div>`).join('')}</div></div></div>`;
 }
-$('#rel').onclick=e=>{const b=e.target.closest('[data-p]');if(b){curRel=b.dataset.p;rel()}};
+$('#rel').onclick=e=>{const b=e.target.closest('[data-p]');if(b){curRel=b.dataset.p;rel()}if(e.target.dataset.pdf==='one')exportPDF([pat(curRel)]);if(e.target.dataset.pdf==='all')exportPDF(pats())};
 $('#rel').onsubmit=e=>{e.preventDefault();const all=DB.get('notes',{});(all[curRel]=all[curRel]||[]).push({ts:Date.now(),text:$('#nt').value.trim()});DB.set('notes',all);rel()};
-const R={inicio,agenda,pacientes,chat,rel};
+
+/* ---------- PDF (usa a impressão do navegador: escolha "Salvar como PDF") ---------- */
+function relHTML(p){
+  const ap=Appt.all().filter(a=>a.pid===p.id).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),notes=DB.get('notes',{})[p.id]||[];
+  return `<section><h2>${esc(p.nome)}</h2><p class="m">Idade: ${esc(p.idade)} • Telefone: ${esc(p.tel)} • E-mail: ${esc(p.email)}<br>Cadastro: ${p.criado?full(p.criado):'-'}</p>
+  <h3>Consultas (${ap.length})</h3>${ap.length?`<table><tr><th>Data</th><th>Horário</th><th>Status</th></tr>${ap.map(a=>`<tr><td>${br(a.date)}</td><td>${a.time}</td><td>${esc(a.status)}</td></tr>`).join('')}</table>`:'<p class="m">Nenhuma consulta.</p>'}
+  <h3>Anotações do psicólogo (${notes.length})</h3>${notes.map(x=>`<div class="n"><small>${full(x.ts)}</small><p>${esc(x.text)}</p></div>`).join('')||'<p class="m">Nenhuma anotação.</p>'}</section>`;
+}
+function exportPDF(list){
+  if(!list.length)return alert('Nenhum paciente para exportar.');
+  const f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f);
+  f.srcdoc=`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>Relatórios - Dr. Erik Henrique</title><style>
+  body{font-family:Arial,sans-serif;color:#102f32;font-size:12px;line-height:1.5;margin:0}header{border-bottom:2px solid #176b68;padding-bottom:8px;margin-bottom:18px}header b{font-size:16px}header small{display:block;color:#496064}
+  section{page-break-after:always}section:last-child{page-break-after:auto}h2{font-size:20px;margin:0 0 4px}h3{font-size:13px;margin:18px 0 6px;color:#176b68;text-transform:uppercase;letter-spacing:.06em}
+  .m{color:#496064}table{width:100%;border-collapse:collapse}th,td{border:1px solid #dce5e1;padding:5px 8px;text-align:left}th{background:#e7f5f1}.n{border:1px solid #dce5e1;border-radius:6px;padding:8px 10px;margin-bottom:8px;page-break-inside:avoid}.n small{color:#7a8b8d}.n p{white-space:pre-wrap;margin:3px 0 0}
+  </style></head><body><header><b>Dr. Erik Henrique • Psicólogo</b><small>Relatório gerado em ${full(Date.now())} • Documento confidencial</small></header>${list.map(relHTML).join('')}</body></html>`;
+  f.onload=()=>{f.contentWindow.focus();f.contentWindow.print();setTimeout(()=>f.remove(),60000)};
+}
+/* ---------- Backup ---------- */
+function bkp(){
+  $('#bkp').innerHTML=`<div class="card"><div class="eyebrow">Backup dos dados</div><p>Os dados ficam salvos neste navegador e <b>não são apagados ao atualizar o código do site</b>. Mesmo assim, baixe um backup de vez em quando (limpar o histórico do navegador apaga tudo).</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px"><button class="btn mint" id="bk1">Baixar backup (.json)</button><label class="btn line" style="margin:0;text-transform:none;letter-spacing:0;font-size:1rem;color:var(--ink)">Restaurar backup<input type="file" id="bk2" accept=".json" hidden></label></div></div>`;
+  $('#bk1').onclick=()=>{const d={};Object.keys(localStorage).filter(k=>k.startsWith('eh_')&&k!=='eh_session').forEach(k=>d[k]=localStorage.getItem(k));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='backup-dr-erik-'+iso(new Date())+'.json';a.click()};
+  $('#bk2').onchange=e=>{const f=e.target.files[0];if(!f||!confirm('Restaurar substitui os dados atuais. Continuar?'))return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);Object.keys(d).forEach(k=>k.startsWith('eh_')&&k!=='eh_session'&&localStorage.setItem(k,d[k]));alert('Backup restaurado.');location.reload()}catch{alert('Arquivo inválido.')}};r.readAsText(f)};
+}
+const R={inicio,agenda,pacientes,chat,rel,bkp};
 function show(t){$$('.tabs button').forEach(x=>x.classList.toggle('on',x.dataset.t===t));Object.keys(R).forEach(k=>$('#'+k).hidden=k!==t);R[t]()}
 $$('.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.t));
 addEventListener('storage',()=>{if(!$('#inicio').hidden)inicio();if(!$('#chat').hidden)chat()});
 setInterval(()=>{if(!$('#chat').hidden&&document.activeElement.id!=='ci')chat()},4000);
 inicio();
+/* ---------- Alertas de novas solicitações (som + título + notificação do navegador) ---------- */
+let ac=null;
+function unlock(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch{}}if(ac&&ac.state==='suspended')ac.resume()}
+['pointerdown','keydown'].forEach(ev=>addEventListener(ev,unlock));
+function beep(){unlock();if(!ac||ac.state!=='running')return;[[880,0],[1175,.2],[880,.4]].forEach(([f,t])=>{const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+t;o.type='sine';o.frequency.value=f;o.connect(g);g.connect(ac.destination);g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(.35,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.18);o.start(s);o.stop(s+.2)})}
+function somBtn(){$('#somBtn').textContent=DB.get('som',true)?'🔔 Som ligado':'🔕 Som desligado'}
+$('#somBtn').onclick=()=>{const on=!DB.get('som',true);DB.set('som',on);somBtn();if(on){unlock();beep();if(window.Notification&&Notification.permission==='default')Notification.requestPermission()}};
+function checkNovas(){
+  const seen=DB.get('seen',null),pend=Appt.all().filter(a=>a.status==='pendente'),ids=pend.map(a=>a.id),n=pend.length;
+  const novas=seen===null?[]:ids.filter(i=>!seen.includes(i));
+  DB.set('seen',[...new Set([...(seen||[]),...ids])]);
+  document.title=(n?`(${n}) `:'')+'CRM | Dr. Erik Henrique Psicologia';
+  $('[data-t=inicio]').textContent='Solicitações'+(n?` (${n})`:'');
+  if(!novas.length)return;
+  if(DB.get('som',true))beep();
+  if(window.Notification&&Notification.permission==='granted'&&document.hidden)new Notification('Nova solicitação de consulta',{body:`${novas.length} nova(s) solicitação(ões) aguardando você.`});
+  if(!$('#inicio').hidden)inicio();
+}
+somBtn();setInterval(checkNovas,3000);
+checkNovas();
 </script></body></html>
