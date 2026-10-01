@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Área do paciente | Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Área do paciente | Dr. Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
 <body><div id="top"></div>
 <main class="wrap" style="padding-bottom:70px">
   <div class="tabs"><button class="on" data-t="agenda">Agenda</button><button data-t="minhas">Minhas consultas</button><button data-t="chat">Chat</button></div>
-  <section id="agenda" class="card"><div class="eyebrow">Horários disponíveis</div><h2 style="font-size:2rem;margin-bottom:20px">Escolha o dia e o horário</h2><div class="days" id="days"></div><div class="slots" id="slots"></div><p style="margin-top:18px;font-size:.85rem">Ao agendar, o Erik é avisado automaticamente por WhatsApp e e-mail.</p></section>
+  <section id="agenda" class="card"><div class="eyebrow">Horários disponíveis</div><h2 style="font-size:2rem;margin-bottom:20px">Escolha o dia e o horário</h2><div class="days" id="days"></div><div class="slots" id="slots"></div><p style="margin-top:18px;font-size:.85rem">Sua solicitação fica pendente até o Dr. Erik confirmar. A resposta chega por WhatsApp ou e-mail.</p></section>
   <section id="minhas" class="card" hidden></section>
   <section id="chat" class="card chat" hidden><div class="msgs" id="msgs"></div><form id="cf"><input id="ci" placeholder="Escreva uma mensagem..." required><button class="btn">Enviar</button></form></section>
 </main>
@@ -22,8 +22,7 @@ $('#days').onclick=e=>{const b=e.target.closest('.day');if(b){sel=b.dataset.d;ag
 $('#slots').onclick=e=>{const b=e.target.closest('.slot');if(!b)return;const h=b.dataset.h;
   if(!confirm(`Solicitar consulta em ${br(sel)} às ${h}?`))return;
   Appt.save([...Appt.all(),{id:uid(),pid:me.id,date:sel,time:h,status:'pendente',criado:Date.now()}]);
-  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'solicitacao',nome:me.nome,tel:me.tel,data:sel,hora:h})}).catch(()=>{});
-  agenda();minhas();alert('Solicitação enviada! Você será avisado por WhatsApp e e-mail quando o Erik confirmar.')};
+    agenda();minhas();alert('Solicitação registrada! O Dr. Erik vai analisar e responder por WhatsApp ou e-mail.')};
 function minhas(){
   const l=Appt.all().filter(a=>a.pid===me.id).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
   $('#minhas').innerHTML=l.map(a=>`<div class="row"><div><b>${br(a.date)} às ${a.time}</b><small>${DIAS[new Date(a.date+'T00:00').getDay()]}</small></div><div><span class="badge ${a.status}">${a.status}</span> ${['pendente','confirmada'].includes(a.status)?`<button class="btn sm danger" data-c="${a.id}">Cancelar</button>`:''}</div></div>`).join('')||'<div class="empty">Você ainda não tem consultas.</div>';
