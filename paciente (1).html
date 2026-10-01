@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Área do paciente | Erik Henrique Psicologia</title><link rel="stylesheet" href="assets/app.css"></head>
+<body><div id="top"></div>
+<main class="wrap" style="padding-bottom:70px">
+  <div class="tabs"><button class="on" data-t="agenda">Agenda</button><button data-t="minhas">Minhas consultas</button><button data-t="chat">Chat</button></div>
+  <section id="agenda" class="card"><div class="eyebrow">Horários disponíveis</div><h2 style="font-size:2rem;margin-bottom:20px">Escolha o dia e o horário</h2><div class="days" id="days"></div><div class="slots" id="slots"></div><p style="margin-top:18px;font-size:.85rem">Ao agendar, o Erik é avisado automaticamente por WhatsApp e e-mail.</p></section>
+  <section id="minhas" class="card" hidden></section>
+  <section id="chat" class="card chat" hidden><div class="msgs" id="msgs"></div><form id="cf"><input id="ci" placeholder="Escreva uma mensagem..." required><button class="btn">Enviar</button></form></section>
+</main>
+<script src="assets/app.js"></script>
+<script>
+const me=Auth.require('paciente');$('#top').innerHTML=topbar(me,'Área do paciente');
+let sel=iso(new Date());
+const days=[...Array(21)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()+i);return d});
+function agenda(){
+  $('#days').innerHTML=days.map(d=>`<button class="day ${iso(d)===sel?'on':''}" data-d="${iso(d)}"><small>${DIAS[d.getDay()].slice(0,3)}</small><b>${d.getDate()}</b><small>${String(d.getMonth()+1).padStart(2,'0')}</small></button>`).join('');
+  const d=new Date(sel+'T00:00'),now=new Date();
+  const free=(DB.get('avail',{})[d.getDay()]||[]).slice().sort().filter(h=>!Appt.taken(sel,h)&&new Date(sel+'T'+h)>now);
+  $('#slots').innerHTML=free.map(h=>`<button class="slot" data-h="${h}">${h}</button>`).join('')||'<div class="empty" style="grid-column:1/-1">Sem horários disponíveis neste dia.</div>';
+}
+$('#days').onclick=e=>{const b=e.target.closest('.day');if(b){sel=b.dataset.d;agenda()}};
+$('#slots').onclick=e=>{const b=e.target.closest('.slot');if(!b)return;const h=b.dataset.h;
+  if(!confirm(`Solicitar consulta em ${br(sel)} às ${h}?`))return;
+  Appt.save([...Appt.all(),{id:uid(),pid:me.id,date:sel,time:h,status:'pendente',criado:Date.now()}]);
+  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tipo:'solicitacao',nome:me.nome,tel:me.tel,data:sel,hora:h})}).catch(()=>{});
+  agenda();minhas();alert('Solicitação enviada! Você será avisado por WhatsApp e e-mail quando o Erik confirmar.')};
+function minhas(){
+  const l=Appt.all().filter(a=>a.pid===me.id).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  $('#minhas').innerHTML=l.map(a=>`<div class="row"><div><b>${br(a.date)} às ${a.time}</b><small>${DIAS[new Date(a.date+'T00:00').getDay()]}</small></div><div><span class="badge ${a.status}">${a.status}</span> ${['pendente','confirmada'].includes(a.status)?`<button class="btn sm danger" data-c="${a.id}">Cancelar</button>`:''}</div></div>`).join('')||'<div class="empty">Você ainda não tem consultas.</div>';
+}
+$('#minhas').onclick=e=>{const id=e.target.dataset.c;if(!id||!confirm('Cancelar esta consulta?'))return;const l=Appt.all();l.find(a=>a.id===id).status='cancelada';Appt.save(l);minhas();agenda()};
+function chat(){const m=$('#msgs');m.innerHTML=chatHTML(me.id,'p');m.scrollTop=m.scrollHeight}
+$('#cf').onsubmit=e=>{e.preventDefault();Chat.send(me.id,'p',$('#ci').value.trim());$('#ci').value='';chat()};
+$$('.tabs button').forEach(b=>b.onclick=()=>{$$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));['agenda','minhas','chat'].forEach(id=>$('#'+id).hidden=id!==b.dataset.t);if(b.dataset.t==='chat')chat();if(b.dataset.t==='minhas')minhas()});
+addEventListener('storage',()=>{agenda();minhas();chat()});setInterval(()=>{if(!$('#chat').hidden)chat()},4000);
+agenda();minhas();
+</script></body></html>
